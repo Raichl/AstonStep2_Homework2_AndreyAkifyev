@@ -9,10 +9,11 @@
         </filter>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/hibernate.log</file>
+
+    <appender name="MY_APP_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/my-application.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/hibernate.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/my-application.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -20,28 +21,13 @@
         </encoder>
     </appender>
 
-    <appender name="SQL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/sql-queries.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/sql-queries.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>7</maxHistory>
-            <totalSizeCap>100MB</totalSizeCap>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %msg%n</pattern>
-        </encoder>
-    </appender>
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
+    <logger name="org.hibernate.type.descriptor.sql" level="TRACE"/>
+    <logger name="org.hibernate.stat" level="DEBUG"/>
+    <logger name="org.hibernate.orm.jdbc.bind" level="TRACE"/>
 
-
-
-
-    <logger name="org.hibernate" level="WARN"/>
-    <logger name="org.hibernate" level="ERROR"/>
-    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
-        <appender-ref ref="SQL_FILE"/>
-    </logger>
-    <logger name="org.hibernate.type.descriptor.sql" level="TRACE" additivity="false">
-        <appender-ref ref="SQL_FILE"/>
+    <logger name="dao.UserDaoImpl" level="DEBUG" additivity="false">
+        <appender-ref ref="MY_APP_FILE"/>
     </logger>
 
     <root level="INFO">
