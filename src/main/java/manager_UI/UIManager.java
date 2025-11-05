@@ -16,7 +16,6 @@ public class UIManager {
     public static void showMenu(String menuName){
         MenuHolder.getMenuMap().get(menuName).showMenuAndChoose();
     }
-
     
     static public void showAllUsers(){
         try {
@@ -33,8 +32,6 @@ public class UIManager {
         } finally {
             showMenu(MenuHolder.START);
         }
-
-
     }
 
     static public void showUserById(){
@@ -104,7 +101,6 @@ public class UIManager {
             }else{
                 System.out.println(StringsHolder.ERROR_NOT_FOUND);
             }
-
         } catch (Exception e) {
             System.out.println(StringsHolder.ERROR_DELETE);
         } finally {
@@ -122,6 +118,7 @@ public class UIManager {
             showMenu(MenuHolder.START);
         }
     }
+
     static private int getInt(String fieldName){
         System.out.printf("%s %s\n",StringsHolder.INSERT,fieldName);
         int id;
@@ -151,6 +148,4 @@ public class UIManager {
             return str;
         }
     }
-
-
 }

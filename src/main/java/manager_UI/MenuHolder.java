@@ -23,7 +23,6 @@ public class MenuHolder {
         Menu menuStart = new Menu(StringsHolder.MENU_START_MESSAGE,btnStart);
         menuMap.put(START,menuStart);
 
-
         List<Menu.Button> btnUpdate= new ArrayList<>();
         btnUpdate.add(new Menu.Button(StringsHolder.NAME,() ->UIManager.updateField(StringsHolder.USER_FIELD_NAME)));
         btnUpdate.add(new Menu.Button(StringsHolder.EMAIL,() ->UIManager.updateField(StringsHolder.USER_FIELD_EMAIL)));

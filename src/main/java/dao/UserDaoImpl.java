@@ -27,7 +27,6 @@ public class UserDaoImpl implements UserDao{
             logger.info("Пользователь НЕ сохранен ошибка{}",e.getMessage());
             throw new RuntimeException("ошибка сохранение");
         }
-
     }
 
     @Override

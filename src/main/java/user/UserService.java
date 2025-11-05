@@ -7,6 +7,7 @@ import java.util.List;
 
 public class UserService {
     private final UserDao usersDao = new UserDaoImpl();
+
     public  User findUser(int id){
         return  usersDao.findById(id);
     }
