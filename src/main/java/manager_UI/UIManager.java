@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UIManager {
+
     private static final UserService userService = new UserService();
     private static final Scanner scanner = new Scanner(System.in);
     private static User selectedUser;
-
     
     public static void showMenu(String menuName){
         MenuHolder.getMenuMap().get(menuName).showMenuAndChoose();
@@ -34,12 +34,12 @@ public class UIManager {
         }
     }
 
-    static public void showUserById(){
+    public static  void showUserById(){
         try {
             User user = userService.findUser(getInt(StringsHolder.ID));
             if (user != null){
                 user.showInConsole();
-            }else{
+            } else {
                 System.out.println(StringsHolder.ERROR_NOT_FOUND);
             }
         } catch (Exception e) {
@@ -49,7 +49,7 @@ public class UIManager {
         }
     }
 
-    static public void updateUserById(){
+    public static  void updateUserById(){
         try {
             User user = userService.findUser(getInt(StringsHolder.ID));
             if (user != null){
@@ -67,20 +67,19 @@ public class UIManager {
         }
     }
 
-    static public void updateField(String fieldName){
+    public static void updateField(String fieldName){
         if (fieldName.equals(StringsHolder.USER_FIELD_NAME)) {
-            selectedUser.setName(getString(StringsHolder.UI_INPUT_USERNAME));
+            selectedUser.setName(getStringFromUser(StringsHolder.UI_INPUT_USERNAME));
         } else if (fieldName.equals(StringsHolder.USER_FIELD_AGE)) {
             selectedUser.setAge(getInt(StringsHolder.UI_INPUT_AGE));
         } else if (fieldName.equals(StringsHolder.USER_FIELD_EMAIL)) {
-            selectedUser.setEmail(getString(StringsHolder.UI_INPUT_EMAIL));
+            selectedUser.setEmail(getStringFromUser(StringsHolder.UI_INPUT_EMAIL));
         }
         selectedUser.showInConsole();
         showMenu(MenuHolder.UPDATE);
     }
 
-
-    static public void startUpdate(){
+    public static void startUpdate(){
         try{
             userService.updateUser(selectedUser);
         }catch (RuntimeException e){
@@ -92,7 +91,7 @@ public class UIManager {
         }
     }
 
-    static public void deleteUserById(){
+    public static void deleteUserById(){
         try {
             User user = userService.findUser(getInt(StringsHolder.ID));
             if (user != null){
@@ -108,7 +107,7 @@ public class UIManager {
         }
     }
 
-    static public void addUser(){
+    public static void addUser(){
         try {
             User user = getUser();
             userService.saveUser(user);
@@ -119,7 +118,7 @@ public class UIManager {
         }
     }
 
-    static private int getInt(String fieldName){
+    private static int getInt(String fieldName){
         System.out.printf("%s %s\n",StringsHolder.INSERT,fieldName);
         int id;
         try {
@@ -131,19 +130,19 @@ public class UIManager {
         return id;
     }
 
-    static private User getUser(){
-        String name = getString(StringsHolder.UI_INPUT_USERNAME);
-        String email = getString(StringsHolder.UI_INPUT_EMAIL);
+    private static User getUser(){
+        String name = getStringFromUser(StringsHolder.UI_INPUT_USERNAME);
+        String email = getStringFromUser(StringsHolder.UI_INPUT_EMAIL);
         int age = getInt(StringsHolder.AGE);
         return new User(name,email,age);
     }
 
-    static private String getString(String text){
+    private static String getStringFromUser(String text){
         System.out.println(text);
         String str = scanner.nextLine();
         if(str.isEmpty() || str.length() > 255){
             System.out.println(StringsHolder.ERROR_ILLEGAL_ARGUMENT);
-            return getString(text);
+            return getStringFromUser(text);
         }else {
             return str;
         }
