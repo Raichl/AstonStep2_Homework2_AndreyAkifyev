@@ -8,34 +8,35 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserDaoImplTest extends BaseTestcontainersTest{
+public class UserDaoImplTest extends BaseTestcontainersTest {
     private UserDao userDao;
     private User testUser;
     private final String TEST_NAME = "TestName";
-    private final String TEST_EMAIL= "TestMail@Ex.com";
+    private final String TEST_EMAIL = "TestMail@Ex.com";
 
-    private final int TEST_AGE= 18;
+    private final int TEST_AGE = 18;
 
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         userDao = new UserDaoImpl();
-        testUser = new User(TEST_NAME,TEST_EMAIL,TEST_AGE);
+        testUser = new User(TEST_NAME, TEST_EMAIL, TEST_AGE);
     }
 
     @Test
-    void shouldSaveCorrect(){
+    void shouldSaveCorrect() {
         userDao.save(testUser);
 
-        assertNotEquals(0,testUser.getId());
+        assertNotEquals(0, testUser.getId());
         User savedUser = userDao.findById(testUser.getId());
         assertNotNull(savedUser);
-        assertEquals(TEST_AGE,savedUser.getAge());
-        assertEquals(TEST_NAME,savedUser.getName());
-        assertEquals(TEST_EMAIL,savedUser.getEmail());
+        assertEquals(TEST_AGE, savedUser.getAge());
+        assertEquals(TEST_NAME, savedUser.getName());
+        assertEquals(TEST_EMAIL, savedUser.getEmail());
     }
+
     @Test
-    void shouldCorrectDelete(){
+    void shouldCorrectDelete() {
         userDao.save(testUser);
 
         userDao.delete(testUser);
@@ -44,26 +45,25 @@ public class UserDaoImplTest extends BaseTestcontainersTest{
     }
 
     @Test
-    void shouldCorrectFindIfExist(){
+    void shouldCorrectFindIfExist() {
         userDao.save(testUser);
 
         User foundUser = userDao.findById(testUser.getId());
 
         assertNotNull(foundUser);
-        assertEquals(testUser.getId(),foundUser.getId());
+        assertEquals(testUser.getId(), foundUser.getId());
         assertEquals(testUser, foundUser);
     }
 
-
     @Test
-    void shouldCorrectFindIfNotExist(){
+    void shouldCorrectFindIfNotExist() {
         assertNull(userDao.findById(9999));
     }
 
     @Test
-    void shouldCorrectFindAll(){
-        User user1 = new User("User1","User1@mail.com",24);
-        User user2 = new User("User2","User2@mail.com",23);
+    void shouldCorrectFindAll() {
+        User user1 = new User("User1", "User1@mail.com", 24);
+        User user2 = new User("User2", "User2@mail.com", 23);
 
         userDao.save(user1);
         userDao.save(user2);

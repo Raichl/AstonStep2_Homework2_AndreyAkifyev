@@ -17,17 +17,18 @@ public abstract class BaseTestcontainersTest {
             .withPassword("test");
 
     @BeforeAll
-    static void beforeAll(){
+    static void beforeAll() {
         postgreSQLContainer.start();
         configureHibernate();
     }
+
     @AfterAll
-    static void afterAll(){
+    static void afterAll() {
         HibernateSessionFactory.shutdown();
         postgreSQLContainer.stop();
     }
 
-    private static void configureHibernate(){
+    private static void configureHibernate() {
         Configuration configuration = new Configuration();
         configuration.setProperty("hibernate.connection.url", postgreSQLContainer.getJdbcUrl());
         configuration.setProperty("hibernate.connection.username", postgreSQLContainer.getUsername());
