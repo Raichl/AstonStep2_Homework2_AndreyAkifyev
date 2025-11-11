@@ -6,24 +6,33 @@ import dao.UserDaoImpl;
 import java.util.List;
 
 public class UserService {
-    private final UserDao usersDao = new UserDaoImpl();
+    private final UserDao usersDao;
 
-    public  User findUser(int id){
-        return  usersDao.findById(id);
+    public UserService() {
+        this.usersDao = new UserDaoImpl();
     }
-    public void saveUser(User user){
+
+    public UserService(UserDao userDao) {
+        this.usersDao = userDao;
+    }
+
+    public User findUser(int id) {
+        return usersDao.findById(id);
+    }
+
+    public void saveUser(User user) {
         usersDao.save(user);
     }
 
-    public void updateUser(User user){
+    public void updateUser(User user) {
         usersDao.update(user);
     }
 
-    public void deleteUser(User user){
+    public void deleteUser(User user) {
         usersDao.delete(user);
     }
 
-    public List<User> findAllUsers(){
+    public List<User> findAllUsers() {
         return usersDao.findAll();
     }
 }

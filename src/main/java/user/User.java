@@ -25,14 +25,14 @@ public class User {
     @Column(name = "created_at")
     private LocalDate created_at;
 
-    public User(String name,String email,int age){
+    public User(String name, String email, int age) {
         this.name = name;
         this.age = age;
         this.email = email;
         this.created_at = LocalDate.now();
     }
 
-    public void showInConsole(){
+    public void showInConsole() {
         System.out.printf("%d. %s %d год email: %s create:%s\n",
                 this.getId(), this.getName(), this.getAge(), this.getEmail(), this.getCreated_at());
     }

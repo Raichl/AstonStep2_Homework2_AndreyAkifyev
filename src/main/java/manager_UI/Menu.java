@@ -1,7 +1,9 @@
 package manager_UI;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import utils.StringsHolder;
+
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.IntStream;
@@ -12,6 +14,7 @@ public record Menu(String text, List<Button> btnList) {
     public static class Button {
         private String text;
         private Pressed press;
+
         public void pressBtn() {
             press.press();
         }
