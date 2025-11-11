@@ -4,7 +4,8 @@ import user.User;
 
 import java.lang.reflect.Field;
 
-public enum StringsHolder {;
+public enum StringsHolder {
+    ;
     public static final String MENU_START_MESSAGE = "Выберите действие";
     public static final String BUTTON_SHOW_ALL = "Отобразить всех пользователей в таблице";
     public static final String BUTTON_GET_USER = "Получить пользователя по id";
@@ -24,7 +25,7 @@ public enum StringsHolder {;
 
     public static final String UI_INPUT_USERNAME = "Введите имя пользователя";
     public static final String UI_INPUT_EMAIL = "Введите Email пользователя";
-    public static final String UI_INPUT_AGE ="Введите возраст пользователя";
+    public static final String UI_INPUT_AGE = "Введите возраст пользователя";
     public static final String UI_INPUT_CHECK_CORRECT = "Убедитесь в правильности ввода";
     public static final String UI_USER_SELECT = "Выбран пользователь:";
     public static final String UI_DIV_LINE = "------------------------------------------------------------------";

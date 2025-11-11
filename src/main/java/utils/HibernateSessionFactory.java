@@ -8,20 +8,36 @@ import user.User;
 
 public class HibernateSessionFactory {
     private static SessionFactory sessionFactory;
-    private HibernateSessionFactory(){}
+
+    private HibernateSessionFactory() {
+    }
 
     public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null){
+        if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration().configure();
                 configuration.addAnnotatedClass(User.class);
                 StandardServiceRegistryBuilder builder =
                         new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
         return sessionFactory;
+    }
+
+    public static void shutdown() {
+        if (sessionFactory != null) {
+            sessionFactory.close();
+            sessionFactory = null;
+        }
+    }
+
+    public static void setConfiguration(Configuration configuration) {
+        if (sessionFactory != null) {
+            sessionFactory.close();
+        }
+        sessionFactory = configuration.buildSessionFactory();
     }
 }
