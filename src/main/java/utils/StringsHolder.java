@@ -52,6 +52,4 @@ public enum StringsHolder {
         USER_FIELD_EMAIL = userFields[2].getName();
         USER_FIELD_AGE = userFields[3].getName();
     }
-
-
 }
