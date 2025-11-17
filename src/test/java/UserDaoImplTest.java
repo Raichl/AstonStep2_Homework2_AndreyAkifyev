@@ -9,13 +9,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserDaoImplTest extends BaseTestcontainersTest {
-    private UserDao userDao;
-    private User testUser;
+
     private final String TEST_NAME = "TestName";
     private final String TEST_EMAIL = "TestMail@Ex.com";
-
     private final int TEST_AGE = 18;
 
+    private UserDao userDao;
+    private User testUser;
 
     @BeforeEach
     void setUp() {
