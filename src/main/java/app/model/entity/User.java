@@ -1,5 +1,4 @@
-package user;
-
+package app.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -11,29 +10,24 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(name = "name")
+    private Long id;
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
-    @Column(name = "age")
-    private int age;
+    @Column(name = "age", nullable = false)
+    private Integer age;
     @Column(name = "created_at")
-    private LocalDate created_at;
+    private LocalDate createdAt;
 
     public User(String name, String email, int age) {
         this.name = name;
         this.age = age;
         this.email = email;
-        this.created_at = LocalDate.now();
-    }
-
-    public void showInConsole() {
-        System.out.printf("%d. %s %d год email: %s create:%s\n",
-                this.getId(), this.getName(), this.getAge(), this.getEmail(), this.getCreated_at());
+        this.createdAt = LocalDate.now();
     }
 }
