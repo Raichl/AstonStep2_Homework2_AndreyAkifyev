@@ -14,6 +14,7 @@ public class UserMapper {
                 entity.getAge()
         );
     }
+
     public static User toEntity(UserDto userDto){
         return new User(userDto.getName(), userDto.getEmail(), userDto.getAge());
     }
