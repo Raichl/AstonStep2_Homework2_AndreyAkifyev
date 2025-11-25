@@ -1,7 +1,6 @@
 package app.controller;
 
 import app.model.dto.UserDto;
-import app.services.KafkaProducerService;
 import app.services.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -17,13 +16,11 @@ import java.util.List;
 @Validated
 public class UserController {
     private final UserService userService;
-    private final KafkaProducerService kafkaProducerService;
+
 
     @GetMapping("/users")
     public List<UserDto> getAllUsers() {
-        kafkaProducerService.sendMessage("notification-events","Получаем всех пользователей");
         return userService.getAll();
-
     }
 
     @GetMapping("/users/{id}")
