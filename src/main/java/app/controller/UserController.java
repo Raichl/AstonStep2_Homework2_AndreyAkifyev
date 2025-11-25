@@ -2,14 +2,18 @@ package app.controller;
 
 import app.model.dto.UserDto;
 import app.services.UserService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class UserController {
     private final UserService userService;
 
@@ -19,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserDto> findById(@PathVariable Long id) {
+    public ResponseEntity<UserDto> findById(@PathVariable @Min(1) Long id) {
         try {
             UserDto user = userService.findById(id);
             return ResponseEntity.ok(user);
@@ -29,12 +33,12 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public UserDto createUser(@RequestBody UserDto userDto) {
+    public UserDto createUser(@RequestBody @Valid UserDto userDto) {
         return userService.createUser(userDto);
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable @Min(1) Long id, @RequestBody @Valid UserDto userDto) {
         try {
             UserDto updaterUser = userService.update(id, userDto);
             return ResponseEntity.ok(updaterUser);
@@ -44,7 +48,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable @Min(1) Long id) {
         userService.delete(id);
         return ResponseEntity.ok().build();
     }

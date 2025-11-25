@@ -17,11 +17,11 @@ import static app.mapper.UserMapper.toDto;
 import static app.mapper.UserMapper.toEntity;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
+    @Transactional
     public UserDto createUser(UserDto userDto) {
         if (userDto.getId() != null) {
             throw new RuntimeException("При создании ID должен быть null");
@@ -31,15 +31,18 @@ public class UserService {
         return toDto(savedUser);
     }
 
+    @Transactional(readOnly = true)
     public List<UserDto> getAll() {
         return userRepository.findAll().stream().map(UserMapper::toDto).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public UserDto findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Пользователь не найден"));
         return toDto(user);
     }
 
+    @Transactional
     public UserDto update(Long id, UserDto userDto) {
         if (userDto.getId() != null && !userDto.getId().equals(id)) {
             throw new RuntimeException("ID в пути и теле не совпадают");
@@ -53,7 +56,7 @@ public class UserService {
         return toDto(savedUser);
     }
 
-
+    @Transactional
     public void delete(Long id) {
         userRepository.deleteById(id);
     }
