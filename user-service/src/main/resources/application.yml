@@ -1,0 +1,37 @@
+server:
+port: 8080
+
+logging:
+  level:
+    com.yourapp: DEBUG
+    org.springframework: INFO
+    org.hibernate: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.boot: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    root: WARN
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/Users
+    username: Admin
+    password: Aston
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: application-group
+      auto-offset-reset: earliest
+    producer:
+      acks: 1
+      retries: 3
