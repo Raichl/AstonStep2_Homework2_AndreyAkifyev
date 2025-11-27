@@ -24,16 +24,15 @@ public class EmailController {
     private EmailService emailService;
 
     @PostMapping("/")
-    public ResponseEntity<NotificationDto> notificationByRest(@RequestBody @Valid NotificationDto notificationDto){
-      log.info("Получен запрос на оповещение пользователя по REST");
-      try {
-          notificationService.sendNotification(notificationDto);
-          log.info("пользователь успешно оповещен");
-          return ResponseEntity.ok().build();
-      } catch (RuntimeException e) {
-          log.error("ошибка оповещения пользователя {}",e.getMessage());
-          return ResponseEntity.badRequest().build();
-      }
+    public ResponseEntity<NotificationDto> notificationByRest(@RequestBody @Valid NotificationDto notificationDto) {
+        log.info("Получен запрос на оповещение пользователя по REST");
+        try {
+            notificationService.sendNotification(notificationDto);
+            log.info("пользователь успешно оповещен");
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            log.error("ошибка оповещения пользователя {}", e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
-
 }

@@ -10,24 +10,23 @@ public class PropertiesTextManager {
 
     private static final String DEFAULT_BUNDLE = "messages";
 
-    public static String get(String key){
+    public static String get(String key) {
         try {
-            ResourceBundle bundle = ResourceBundle.getBundle(DEFAULT_BUNDLE,Locale.getDefault());
+            ResourceBundle bundle = ResourceBundle.getBundle(DEFAULT_BUNDLE, Locale.getDefault());
             return bundle.getString(key);
         } catch (Exception e) {
-            return String.format("[ %s ] %s",key,e.getMessage());
+            return String.format("[ %s ] %s", key, e.getMessage());
         }
     }
 
-    public static String get(String key,Locale locale){
+    public static String get(String key, Locale locale) {
         try {
-            ResourceBundle bundle = ResourceBundle.getBundle(DEFAULT_BUNDLE,locale);
+            ResourceBundle bundle = ResourceBundle.getBundle(DEFAULT_BUNDLE, locale);
             return bundle.getString(key);
         } catch (Exception e) {
-            return String.format("[ %s ] %s",key,e.getMessage());
+            return String.format("[ %s ] %s", key, e.getMessage());
         }
     }
-
 
 
 }

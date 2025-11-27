@@ -11,8 +11,8 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class NotificationServiceTests {
@@ -28,8 +28,9 @@ public class NotificationServiceTests {
     private NotificationDto createNotificationDto;
     private NotificationDto deleteNotificationDto;
     private NotificationDto unknownNotificationDto;
+
     @BeforeEach
-    public void setup(){
+    public void setup() {
         propertiesTextManagerMock = mockStatic(PropertiesTextManager.class);
 
 
@@ -54,7 +55,7 @@ public class NotificationServiceTests {
     }
 
     @Test
-    void sendNotification_WithDeleteType_ShouldSendDeleteMessage(){
+    void sendNotification_WithDeleteType_ShouldSendDeleteMessage() {
         String expectedMessage = "Здравствуйте! Ваш аккаунт был удалён.";
         propertiesTextManagerMock.when(() -> PropertiesTextManager.get("notification.delete"))
                 .thenReturn(expectedMessage);
@@ -63,12 +64,12 @@ public class NotificationServiceTests {
         notificationService.sendNotification(deleteNotificationDto);
 
         propertiesTextManagerMock.verify(() -> PropertiesTextManager.get("notification.delete"));
-        verify(emailService,times(1))
-                .sendEmail("test@test.com","no reply",expectedMessage);
+        verify(emailService, times(1))
+                .sendEmail("test@test.com", "no reply", expectedMessage);
     }
 
     @Test
-    void sendNotification_WithCreateType_ShouldSendCreateMessage(){
+    void sendNotification_WithCreateType_ShouldSendCreateMessage() {
         String expectedMessage = "Здравствуйте! Ваш аккаунт на сайте ваш сайт был успешно создан.";
         propertiesTextManagerMock.when(() -> PropertiesTextManager.get("notification.create"))
                 .thenReturn(expectedMessage);
@@ -76,16 +77,17 @@ public class NotificationServiceTests {
         notificationService.sendNotification(createNotificationDto);
 
         propertiesTextManagerMock.verify(() -> PropertiesTextManager.get("notification.create"));
-        verify(emailService,times(1))
-                .sendEmail("test@test.com","no reply",expectedMessage);
+        verify(emailService, times(1))
+                .sendEmail("test@test.com", "no reply", expectedMessage);
     }
+
     @Test
-    void sendNotification_WithUnknownType_ShouldThrowException(){
-        RuntimeException exception = assertThrows(RuntimeException.class,() ->{
+    void sendNotification_WithUnknownType_ShouldThrowException() {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             notificationService.sendNotification(unknownNotificationDto);
         });
 
         propertiesTextManagerMock.verifyNoInteractions();
-        verify(emailService,never()).sendEmail(anyString(),anyString(),anyString());
+        verify(emailService, never()).sendEmail(anyString(), anyString(), anyString());
     }
 }

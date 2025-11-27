@@ -25,9 +25,8 @@ public class KafkaConsumerService {
             log.info("пользователь успешно оповещен");
 
         } catch (RuntimeException e) {
-            log.error("ошибка оповещения {}",e.getMessage());
+            log.error("ошибка оповещения {}", e.getMessage());
         }
 
     }
-
 }
