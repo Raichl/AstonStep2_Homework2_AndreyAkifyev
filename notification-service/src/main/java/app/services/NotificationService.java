@@ -7,27 +7,32 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
-    private final String REMOVE_TYPE = "remove";
-    private final String REMOVE_MESSAGE = "Здравствуйте! Ваш аккаунт был удалён.";
+    private final String DELETE_TYPE = "remove";
     private final String CREATE_TYPE = "create";
-    private final String CREATE_MESSAGE = "Здравствуйте! Ваш аккаунт на сайте был успешно создан.";
 
-    public void sendNotification(NotificationDto notificationDto) {
+    private final PropertiesTextManager propertiesTextManager;
+
+    public NotificationDto sendNotification(NotificationDto notificationDto) {
         String message = getSendingMessage(notificationDto.getNotificationType());
-        sendEmail(notificationDto.getEmail(), message);
+        NotificationDto notification = sendEmail(notificationDto.getEmail(), message);
+        if (notification != null){
+         return notification;
+        }else{
+            throw new RuntimeException("ошибка отправки email");
+        }
     }
 
-    private void sendEmail(String email, String message) {
-
+    private NotificationDto sendEmail(String email, String message) {
+        return null;
     }
 
     private String getSendingMessage(String notificationType) {
-        if (notificationType.equals(REMOVE_TYPE)) {
-            return REMOVE_MESSAGE;
+        if (notificationType.equals(DELETE_TYPE)) {
+            return PropertiesTextManager.get("notification.delete");
         } else if (notificationType.equals(CREATE_TYPE)) {
-            return CREATE_MESSAGE;
+            return PropertiesTextManager.get("notification.create");
         } else {
-            throw new RuntimeException("Неверный тип оповещения");
+            throw new RuntimeException("Неизвестный тип оповещения");
         }
     }
 }

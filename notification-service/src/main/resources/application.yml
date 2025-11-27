@@ -3,8 +3,13 @@ server:
 
 logging:
   level:
-    org.springframework: DEBUG
-    com.yourpackage: DEBUG
+    app.services.KafkaConsumerService: DEBUG
+    app.controller.EmailController : DEBUG
+    root: ERROR
+  file:
+    name: ./notification-service/logs/notification-service.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n"
 
 spring:
   kafka:
