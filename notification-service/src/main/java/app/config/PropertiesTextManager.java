@@ -1,14 +1,9 @@
-package app.services;
+package app.config;
 
 import org.springframework.stereotype.Component;
 
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Locale;
-import java.util.Map;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class PropertiesTextManager {

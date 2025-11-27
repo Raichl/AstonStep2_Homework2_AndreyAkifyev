@@ -1,15 +1,17 @@
 package app.controller;
 
 import app.model.dto.NotificationDto;
+import app.services.EmailService;
 import app.services.NotificationService;
-import app.services.PropertiesTextManager;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Locale;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -18,22 +20,19 @@ import java.util.Locale;
 public class EmailController {
 
     private final NotificationService notificationService;
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping("/")
     public ResponseEntity<NotificationDto> notificationByRest(@RequestBody @Valid NotificationDto notificationDto){
       log.info("Получен запрос на оповещение пользователя по REST");
       try {
-          NotificationDto notification =  notificationService.sendNotification(notificationDto);
-          return ResponseEntity.ok(notification);
+          notificationService.sendNotification(notificationDto);
+          return ResponseEntity.ok().build();
       } catch (RuntimeException e) {
           log.error("ошибка оповещения пользователя {}",e.getMessage());
           return ResponseEntity.badRequest().build();
       }
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> test(){
-
-        return ResponseEntity.ok(PropertiesTextManager.get("notification.create") );
-    }
 }

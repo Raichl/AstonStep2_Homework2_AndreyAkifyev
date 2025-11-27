@@ -1,7 +1,9 @@
 package app.services;
 
+import app.config.PropertiesTextManager;
 import app.model.dto.NotificationDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,19 +13,20 @@ public class NotificationService {
     private final String CREATE_TYPE = "create";
 
     private final PropertiesTextManager propertiesTextManager;
+    @Autowired
+    private EmailService emailService;
 
-    public NotificationDto sendNotification(NotificationDto notificationDto) {
-        String message = getSendingMessage(notificationDto.getNotificationType());
-        NotificationDto notification = sendEmail(notificationDto.getEmail(), message);
-        if (notification != null){
-         return notification;
-        }else{
+    public void sendNotification(NotificationDto notificationDto) {
+        try {
+            String message = getSendingMessage(notificationDto.getNotificationType());
+            sendEmail(notificationDto.getEmail(), message);
+        } catch (Exception e) {
             throw new RuntimeException("ошибка отправки email");
         }
     }
 
-    private NotificationDto sendEmail(String email, String message) {
-        return null;
+    private void sendEmail(String email, String message) {
+        emailService.sendEmail(email,"Create",message);
     }
 
     private String getSendingMessage(String notificationType) {
