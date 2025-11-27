@@ -6,6 +6,7 @@ import app.model.dto.UserDto;
 import app.model.entity.User;
 import app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 import static app.mapper.UserMapper.toDto;
 import static app.mapper.UserMapper.toEntity;
+
 
 @Service
 @RequiredArgsConstructor
