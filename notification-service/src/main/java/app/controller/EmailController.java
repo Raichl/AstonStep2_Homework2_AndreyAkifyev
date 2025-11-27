@@ -28,6 +28,7 @@ public class EmailController {
       log.info("Получен запрос на оповещение пользователя по REST");
       try {
           notificationService.sendNotification(notificationDto);
+          log.info("пользователь успешно оповещен");
           return ResponseEntity.ok().build();
       } catch (RuntimeException e) {
           log.error("ошибка оповещения пользователя {}",e.getMessage());

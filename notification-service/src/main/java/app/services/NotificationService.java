@@ -13,20 +13,20 @@ public class NotificationService {
     private final String CREATE_TYPE = "create";
 
     private final PropertiesTextManager propertiesTextManager;
-    @Autowired
-    private EmailService emailService;
+
+    private final EmailService emailService;
 
     public void sendNotification(NotificationDto notificationDto) {
         try {
             String message = getSendingMessage(notificationDto.getNotificationType());
             sendEmail(notificationDto.getEmail(), message);
         } catch (Exception e) {
-            throw new RuntimeException("ошибка отправки email");
+            throw new RuntimeException("ошибка отправки email",e);
         }
     }
 
     private void sendEmail(String email, String message) {
-        emailService.sendEmail(email,"Create",message);
+        emailService.sendEmail(email,"no reply",message);
     }
 
     private String getSendingMessage(String notificationType) {
