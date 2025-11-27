@@ -1,0 +1,17 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    org.springframework: DEBUG
+    com.yourpackage: DEBUG
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+  consumer:
+    group-id: application-group
+    auto-offset-reset: earliest
+    producer:
+    acks: 1
+    retries: 3
