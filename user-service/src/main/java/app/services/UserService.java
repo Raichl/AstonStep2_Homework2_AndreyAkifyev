@@ -6,7 +6,6 @@ import app.model.dto.UserDto;
 import app.model.entity.User;
 import app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +15,13 @@ import java.util.stream.Collectors;
 import static app.mapper.UserMapper.toDto;
 import static app.mapper.UserMapper.toEntity;
 
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private final String NOTIFICATION_TOPIC = "notification-events";
     private final UserRepository userRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     @Transactional
     public UserDto createUser(UserDto userDto) {
@@ -28,6 +30,9 @@ public class UserService {
         }
         User user = toEntity(userDto);
         User savedUser = userRepository.save(user);
+
+        kafkaProducerService.sendJsonMessage(NOTIFICATION_TOPIC, UserMapper.getNotificationDto(savedUser, "create"));
+
         return toDto(savedUser);
     }
 
@@ -58,7 +63,8 @@ public class UserService {
 
     @Transactional
     public void delete(Long id) {
+        UserDto deleteUser = findById(id);
         userRepository.deleteById(id);
+        kafkaProducerService.sendJsonMessage(NOTIFICATION_TOPIC, UserMapper.getNotificationDto(deleteUser, "remove"));
     }
-
 }
