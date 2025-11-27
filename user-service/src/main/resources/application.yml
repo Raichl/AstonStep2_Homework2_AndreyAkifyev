@@ -1,0 +1,48 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    app.controller.UserController: DEBUG
+    app.services.KafkaProducerService: DEBUG
+    org.hibernate: WARN
+    org.hibernate.SQL: OFF
+    org.hibernate.type: OFF
+    root: ERROR
+
+  file:
+    name: ./user-service/logs/user-service.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n"
+
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 20
+      total-size-cap: 100MB
+      clean-history-on-start: true
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/Users
+    username: Admin
+    password: Aston
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: application-group
+      auto-offset-reset: earliest
+    producer:
+      acks: 1
+      retries: 3

@@ -1,0 +1,37 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    app.services.KafkaConsumerService: DEBUG
+    app.controller.EmailController : DEBUG
+    root: ERROR
+  file:
+    name: ./notification-service/logs/notification-service.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n"
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+  consumer:
+    group-id: application-group
+    auto-offset-reset: earliest
+    producer:
+    acks: 1
+    retries: 3
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username:  ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
