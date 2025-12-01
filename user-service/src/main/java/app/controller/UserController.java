@@ -19,7 +19,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         log.info("Запрос на получение пользователей");
