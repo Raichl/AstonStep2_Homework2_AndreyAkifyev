@@ -11,7 +11,7 @@ logging:
     root: ERROR
 
   file:
-    name: ./user-service/logs/user-service.log
+    name: ./logs/user-service.log
   pattern:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n"
 
