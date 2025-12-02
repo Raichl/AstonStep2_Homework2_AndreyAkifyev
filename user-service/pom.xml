@@ -73,12 +73,7 @@
             <artifactId>spring-kafka</artifactId>
             <version>3.1.2</version>
         </dependency>
-        <!-- HEBIRNATE -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>6.4.4.Final</version>
-        </dependency>
+
         <!-- LOMBOK -->
         <dependency>
             <groupId>org.projectlombok</groupId>
