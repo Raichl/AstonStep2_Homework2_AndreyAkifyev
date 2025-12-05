@@ -11,7 +11,7 @@ logging:
     root: ERROR
 
   file:
-    name: ./user-service/logs/user-service.log
+    name: ./logs/user-service.log
   pattern:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n"
 
@@ -37,7 +37,6 @@ spring:
       hibernate:
         format_sql: false
 
-
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
@@ -46,3 +45,16 @@ spring:
     producer:
       acks: 1
       retries: 3
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
