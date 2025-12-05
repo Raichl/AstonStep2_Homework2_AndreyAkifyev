@@ -20,6 +20,8 @@ public class UserServiceTest {
 
     @MockBean
     private UserRepository userRepository;
+    @MockBean
+    private KafkaProducerService kafkaProducerService;
     @Autowired
     private UserService userService;
 
@@ -110,8 +112,13 @@ public class UserServiceTest {
 
     @Test
     void deleteUser_Success() {
-        doNothing().when(userRepository).deleteById(1L);
+        User user = new User("Ванек", "Test@mail.com", 25);
+        user.setId(1L);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        doNothing().when(kafkaProducerService).sendJsonMessage(any(),any());
+
         userService.delete(1L);
+
         verify(userRepository).deleteById(1L);
     }
 }

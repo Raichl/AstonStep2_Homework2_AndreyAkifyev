@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.mapper.UserModelAssembler;
 import app.model.dto.UserDto;
 import app.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -29,17 +32,22 @@ class UserControllerTest {
     @MockBean
     UserService userService;
 
+    @MockBean
+    private UserModelAssembler userModelAssembler;
+
     @Test
     void createUser_Success() throws Exception {
         UserDto request = new UserDto("User1","user1@test.com",25);
         UserDto response = new UserDto(1L,"User1","user1@test.com",25);
+        EntityModel<UserDto> entityModel = EntityModel.of(response);
 
         when(userService.createUser(any(UserDto.class))).thenReturn(response);
+        when(userModelAssembler.toModel(response)).thenReturn(entityModel);
 
         mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().is(201))
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("User1"))
                 .andExpect(jsonPath("$.email").value("user1@test.com"))
@@ -53,14 +61,20 @@ class UserControllerTest {
     void getAllUsers_Success() throws Exception {
         UserDto userDto1 = new UserDto(1L,"User1","user1@test.com",25);
         UserDto userDto2 = new UserDto(2L,"User2","user2@test.com",30);
+        List<UserDto> userDtoList = List.of(userDto1,userDto2);
 
-        when(userService.getAll()).thenReturn((List.of(userDto1,userDto2)));
+        EntityModel<UserDto> entityModel1 = EntityModel.of(userDto1);
+        EntityModel<UserDto> entityModel2 = EntityModel.of(userDto2);
+        CollectionModel<EntityModel<UserDto>> collectionModel = CollectionModel.of(List.of(entityModel1,entityModel2));
+
+        when(userService.getAll()).thenReturn(userDtoList);
+        when(userModelAssembler.toCollectionModel(userDtoList)).thenReturn(collectionModel);
 
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$.[0].id").value(1))
-                .andExpect(jsonPath("$.[1].id").value(2));
+                .andExpect(jsonPath("$._embedded.userDtoList.length()").value(2))
+                .andExpect(jsonPath("$._embedded.userDtoList[0].id").value(1))
+                .andExpect(jsonPath("$._embedded.userDtoList[1].id").value(2));
         verify(userService).getAll();
     }
 
@@ -68,8 +82,10 @@ class UserControllerTest {
     @Test
     void getUserById_Success()throws Exception{
         UserDto userDto1 = new UserDto(1L,"User1","user1@test.com",25);
+        EntityModel<UserDto> entityModel = EntityModel.of(userDto1);
 
         when(userService.findById(1L)).thenReturn(userDto1);
+        when(userModelAssembler.toModel(userDto1)).thenReturn(entityModel);
 
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
@@ -93,8 +109,10 @@ class UserControllerTest {
     void updateUser_Success() throws Exception {
         UserDto request = new UserDto(null,"User1","user1@test.com",30);
         UserDto response = new UserDto(1L,"User1","user1@test.com",30);
+        EntityModel<UserDto> entityModel = EntityModel.of(response);
 
         when(userService.update(eq(1L),any(UserDto.class))).thenReturn(response);
+        when(userModelAssembler.toModel(response)).thenReturn(entityModel);
 
         mockMvc.perform(put("/users/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -109,7 +127,7 @@ class UserControllerTest {
     void deleteUser_Success() throws Exception {
         doNothing().when(userService).delete(1L);
 
-        mockMvc.perform(delete("/users/1")).andExpect(status().isOk());
+        mockMvc.perform(delete("/users/1")).andExpect(status().is(204));
 
         verify(userService).delete(1L);
     }
