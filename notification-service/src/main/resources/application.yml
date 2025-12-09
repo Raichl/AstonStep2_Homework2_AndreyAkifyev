@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8082
 
 logging:
   level:
@@ -12,6 +12,8 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n"
 
 spring:
+  application:
+    name: notification-service
   kafka:
     bootstrap-servers: localhost:9092
   consumer:
@@ -35,3 +37,14 @@ spring:
           connectiontimeout: 5000
           timeout: 3000
           writetimeout: 5000
+
+  eureka:
+    client:
+      service-url:
+        defaultZone: http://localhost:8761/eureka
+      enabled: true
+      fetch-registry: true
+      register-with-eureka: true
+    instance:
+      hostname: localhost
+      prefer-ip-address: true
