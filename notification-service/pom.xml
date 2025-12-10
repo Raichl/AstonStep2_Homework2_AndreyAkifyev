@@ -79,27 +79,20 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.42.0</version>
-                <configuration>
-                    <images>
-                        <image>
-                            <name>AstonHome:latest</name>
-                            <build>
-                                <dockerFile>Dockerfile</dockerFile>
-                            </build>
-                        </image>
-                    </images>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

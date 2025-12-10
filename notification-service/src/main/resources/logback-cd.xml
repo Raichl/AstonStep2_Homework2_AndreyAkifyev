@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="CB_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./notification-service/logs/circuit-breaker-errors.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./notification-service/logs/circuit-breaker-errors.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="CIRCUIT_BREAKER_LOGGER" level="ERROR" additivity="false">
+        <appender-ref ref="CB_FILE"/>
+    </logger>
+</configuration>

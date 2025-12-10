@@ -1,9 +1,16 @@
-server:
-  port: 8761
+spring:
+  application:
+    name: eureka-service
 
-eureka:
-  client:
-    register-with-eureka: false
-    fetch-registry: false
-    service-url:
-      defaultZone: http://localhost:8761/eureka
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888}
+
+  cloud:
+    config:
+      enabled: true
+      uri: ${CONFIGURATION_SERVICE_URL:http://localhost:8888}
+
+    retry:
+      initial-interval: 1000
+      max-interval: 2000
+      max-attempts: 6
