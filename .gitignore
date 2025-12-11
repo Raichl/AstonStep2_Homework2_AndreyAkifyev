@@ -4,7 +4,7 @@ target/
 !**/src/test/**/target/
 logs/
 .env
-
+.mvn
 ### IntelliJ IDEA ###
 .idea/
 .idea/modules.xml

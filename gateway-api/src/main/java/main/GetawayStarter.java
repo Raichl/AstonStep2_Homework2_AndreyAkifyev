@@ -1,5 +1,4 @@
-package app;
-
+package main;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,8 +6,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class UserCRUDApplication {
+public class GetawayStarter {
     public static void main(String[] args) {
-        SpringApplication.run(UserCRUDApplication.class, args);
+        SpringApplication.run(GetawayStarter.class,args);
     }
 }
