@@ -1,33 +1,26 @@
 server:
   port: 8082
 
-logging:
-  level:
-    app.services.KafkaConsumerService: DEBUG
-    app.controller.EmailController : DEBUG
-    CIRCUIT_BREAKER_LOGGER: ERROR
-    root: ERROR
-  file:
-    name: ./notification-service/logs/notification-service.log
-  pattern:
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n"
-  logback:
-    rollingpolicy:
-      max-file-size: 10MB
-      max-history: 30
-    config: classpath:logback-cb.xml
+#logging:
+#  level:
+#    app.services.KafkaConsumerService: DEBUG
+#    app.controller.EmailController : DEBUG
+#    CIRCUIT_BREAKER_LOGGER: ERROR
+#    root: ERROR
+#  file:
+#    name: ./notification-service/logs/notification-service.log
+#  pattern:
+#    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n"
+#  logback:
+#    rollingpolicy:
+#      max-file-size: 10MB
+#      max-history: 30
+#    config: classpath:logback-cb.xml
 
 spring:
   application:
     name: notification-service
-  kafka:
-    bootstrap-servers: localhost:9092
-  consumer:
-    group-id: application-group
-    auto-offset-reset: earliest
-    producer:
-    acks: 1
-    retries: 3
+
 
   mail:
     host: smtp.gmail.com
@@ -44,13 +37,15 @@ spring:
           timeout: 3000
           writetimeout: 5000
 
-  eureka:
-    client:
-      service-url:
-        defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka}
-      enabled: true
-      fetch-registry: true
-      register-with-eureka: true
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER:localhost:9092}
+    consumer:
+      group-id: application-group
+      auto-offset-reset: earliest
+      producer:
+      acks: 1
+      retries: 3
+
 
   resilience4j:
     circuitbreaker:
@@ -73,3 +68,11 @@ spring:
       instances:
         messageService:
           timeout-duration: 3s
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+      register-with-eureka: true
+      fetch-registry: true
+
