@@ -2,8 +2,52 @@ volumes:
   postgres_data:
   kafka_data:
   app_logs:
+  config_data:
 
 services:
+  config-service:
+    build:
+      context: ./configuration-service
+      dockerfile: Dockerfile
+    container_name: config-server
+    restart: always
+    ports:
+      - "8888:8888"
+    environment:
+      SPRING_PROFILES_ACTIVE: native
+
+    volumes:
+      - config_data:/app/config
+    healthcheck:
+      test: [ "CMD", "sh", "-c", "nc -z localhost 8888" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  eureka-service:
+    build:
+      context: ./eureka-discovery-service
+      dockerfile: Dockerfile
+    container_name:  eureka-service
+    restart: always
+    ports:
+      - "8761:8761"
+    volumes:
+      - config_data:/app/config
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-service:8761/eureka
+      CONFIGURATION_SERVICE_URL: http://config-server:8888
+    depends_on:
+      config-service:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "sh", "-c", "nc -z localhost 8761" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
   postgres:
     image: postgres:16-alpine
     container_name: postgres
@@ -34,15 +78,16 @@ services:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: controller,broker
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
-      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,PLAINTEXT_HOST://:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     healthcheck:
       test: [ "CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list" ]
       interval: 10s
@@ -50,14 +95,96 @@ services:
       retries: 10
       start_period: 40s
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
+
+  gateway-api:
+    build:
+      context: ./gateway-api
+      dockerfile: Dockerfile
+    container_name: gateway-api
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - config_data:/app/config
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-service:8761/eureka
+      CONFIGURATION_SERVICE_URL: http://config-server:8888
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
     healthcheck:
-      test: [ "CMD", "echo", "ruok", "nc", "localhost", "2181" ]
+      test: [ "CMD", "sh", "-c", "nc -z localhost 8080" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    container_name: notification-service
+    restart: always
+    ports:
+      - "8082:8082"
+    volumes:
+      - config_data:/app/config
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-service:8761/eureka
+      CONFIGURATION_SERVICE_URL: http://config-server:8888
+      KAFKA_SERVER: kafka:9092
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "sh", "-c", "nc -z localhost 8082" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    restart: always
+    ports:
+      - "8081:8081"
+    volumes:
+      - config_data:/app/config
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-service:8761/eureka
+      CONFIGURATION_SERVICE_URL: http://config-server:8888
+      KAFKA_SERVER: kafka:9092
+      SERVER_PORT: 8081
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: userdb
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "sh", "-c", "nc -z localhost 8081" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
 
 

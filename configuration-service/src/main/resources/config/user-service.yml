@@ -1,26 +1,32 @@
 server:
   port: ${SERVER_PORT:8081}
 
-logging:
-  level:
-    app.controller.UserController: DEBUG
-    app.services.KafkaProducerService: DEBUG
-    org.hibernate: WARN
-    org.hibernate.SQL: OFF
-    org.hibernate.type: OFF
-    root: ERROR
 
-  file:
-    name: ./user-service/logs/user-service.log
-  pattern:
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n"
 
-  logback:
-    rollingpolicy:
-      max-file-size: 10MB
-      max-history: 20
-      total-size-cap: 100MB
-      clean-history-on-start: true
+
+#logging:
+#  level:
+#    com.netflix.discovery: DEBUG
+#    com.netflix.eureka: DEBUG
+#    app.controller.UserController: DEBUG
+#    app.services.KafkaProducerService: DEBUG
+#    org.hibernate: WARN
+#    org.hibernate.SQL: OFF
+#    org.hibernate.type: OFF
+#    org.springframework.boot: INFO
+#    root: INFO
+
+#  file:
+#    name: ./user-service/logs/user-service.log
+#  pattern:
+#    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n"
+#
+#  logback:
+#    rollingpolicy:
+#      max-file-size: 10MB
+#      max-history: 20
+#      total-size-cap: 100MB
+#      clean-history-on-start: true
 
 
 spring:
@@ -42,7 +48,7 @@ spring:
         format_sql: false
 
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:http://localhost:9092}
+    bootstrap-servers: ${KAFKA_SERVER:localhost:9092}
     consumer:
       group-id: application-group
       auto-offset-reset: earliest
@@ -54,13 +60,12 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-  eureka:
-    client:
-      service-url:
-        defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka}
-      instance:
-        hostname: user-service
-        prefer-ip-address: true
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+      register-with-eureka: true
+      fetch-registry: true
 
 
 springdoc:
@@ -70,3 +75,4 @@ springdoc:
     path: /swagger-ui.html
     operations-sorter: method
     tags-sorter: alpha
+
