@@ -1,6 +1,6 @@
 spring:
   application:
-    name: notification-service
+    name: gateway-api
 
   config:
     import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888}
