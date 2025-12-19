@@ -13,3 +13,12 @@ spring:
             - classpath:/config/
             - file:./config/
             - file:/etc/microservices-config/
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info
+    endpoint:
+      health:
+        show-details: always
+      enabled-by-default: true
