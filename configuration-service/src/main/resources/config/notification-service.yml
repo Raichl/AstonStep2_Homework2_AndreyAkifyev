@@ -1,21 +1,21 @@
 server:
   port: 8082
 
-#logging:
-#  level:
-#    app.services.KafkaConsumerService: DEBUG
-#    app.controller.EmailController : DEBUG
-#    CIRCUIT_BREAKER_LOGGER: ERROR
-#    root: ERROR
-#  file:
-#    name: ./notification-service/logs/notification-service.log
-#  pattern:
-#    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n"
-#  logback:
-#    rollingpolicy:
-#      max-file-size: 10MB
-#      max-history: 30
-#    config: classpath:logback-cb.xml
+logging:
+  level:
+    app.services.KafkaConsumerService: DEBUG
+    app.controller.EmailController : DEBUG
+    CIRCUIT_BREAKER_LOGGER: ERROR
+    root: ERROR
+  file:
+    name: ./notification-service/logs/notification-service.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n"
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 30
+    config: classpath:logback-cb.xml
 
 spring:
   application:
